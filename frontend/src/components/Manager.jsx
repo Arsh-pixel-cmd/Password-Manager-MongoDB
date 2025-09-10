@@ -12,9 +12,11 @@ const Manager = () => {
   const [alert, setAlert] = useState(null);
   const [editingId, setEditingId] = useState(null);
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
   const getPasswords = async () => {
     try {
-      let req = await fetch("http://localhost:3000/api/passwords");
+      let req = await fetch(`${API_URL}/api/passwords`);
       if (!req.ok) throw new Error("Network response was not ok");
       let passwords = await req.json();
       setPasswordArray(passwords);
@@ -46,7 +48,7 @@ const Manager = () => {
     if (!form.site || !form.username || !form.password) return;
 
     if (editingId) {
-      await fetch(`http://localhost:3000/api/passwords/${editingId}`, {
+      await fetch(`${API_URL}/api/passwords/${editingId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -54,7 +56,7 @@ const Manager = () => {
       toast.info("Updated Sucessfully✨");
       setEditingId(null);
     } else {
-      await fetch("http://localhost:3000/api/passwords", {
+      await fetch(`${API_URL}/api/passwords`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -67,7 +69,7 @@ const Manager = () => {
   };
 
   const deletePassword = async (id) => {
-    await fetch(`http://localhost:3000/api/passwords/${id}`, {
+    await fetch(`${API_URL}/api/passwords/${id}`, {
       method: "DELETE",
     });
     toast.warn("Password deleted ❌");
